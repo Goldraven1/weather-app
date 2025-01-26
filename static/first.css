@@ -73,6 +73,104 @@ h1 {
   display: none;
 }
 
+.weather-container {
+  margin-top: 20px;
+}
+
+.weather-card {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  padding: 20px;
+  display: inline-block;
+  text-align: left;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.weather-card h2 {
+  margin-top: 0;
+}
+
+.weather-card img {
+  width: 100px;
+  height: 100px;
+}
+
+.weather-card p {
+  margin: 5px 0;
+}
+
+.weather-card button {
+    margin-top: 15px;
+    width: 100%;
+}
+
+.weather-form {
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.weather-input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+}
+
+.weather-input:focus {
+  border-color: #6667ee;
+}
+
+.weather-btn {
+  padding: 8px 16px;
+  background-color: #6667ee;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.weather-btn:hover {
+  background-color: #764ba2;
+}
+
+#dayForecast {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+#dayForecast h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+#dayForecast p {
+    margin: 5px 0;
+    color: #666;
+}
+
+#monthForecast {
+    margin-top: 20px;
+}
+
+#monthForecastContent {
+    margin: 15px 0;
+}
+
+#monthForecastContent p {
+    padding: 10px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+#monthForecastContent p:last-child {
+    border-bottom: none;
+}
+
 @media screen and (max-width: 800px) {
   .nav-container {
     position: fixed;

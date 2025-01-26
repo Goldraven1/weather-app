@@ -2,36 +2,62 @@
 <html>
 <head>
   <link rel="stylesheet" href="first.css">
-  <title>Info Tech</title>
+  <title>davidov</title>
 </head>
-<body> 
-    <body>
-        <header>
-            <div class="nav-wrapper">
-                <div class="logo-container">
-                    <img class="logo" src="https://www.creativefabrica.com/wp-content/uploads/2019/01/Backpack-vector-icon-by-tutukof-580x386.png" alt="Logo">
-                </div>
-                <nav>
-                    <input class="hidden" type="checkbox" id="menuToggle">
-                    <label class="menu-btn" for="menuToggle">
-                        <div class="menu"></div>
-                        <div class="menu"></div>
-                        <div class="menu"></div>
-                    </label>
-                    <div class="nav-container">
-                        <ul class="nav-tabs">
-                            <li class="nav-tab">Главная страница</li>
-                            <li class="nav-tab">Планирование поездки</li>
-                            <li class="nav-tab">Список багажа</li>
-                            <li class="nav-tab">Направления</li>
-                            <li class="nav-tab">Советы путешественникам</li>
-                            <li class="nav-tab">Контакты</li>
-                        </ul>
-                    </div>
-                </nav>
+<body>
+    <header>
+        <div class="nav-wrapper">
+            <div class="logo-container">
+                <img class="logo" src="https://www.creativefabrica.com/wp-content/uploads/2019/01/Backpack-vector-icon-by-tutukof-580x386.png" alt="Logo">
             </div>
-        </header>
-    </body>
+            <nav>
+                <input class="hidden" type="checkbox" id="menuToggle">
+                <label class="menu-btn" for="menuToggle">
+                    <div class="menu"></div>
+                    <div class="menu"></div>
+                    <div class="menu"></div>
+                </label>
+                <div class="nav-container">
+                    <ul class="nav-tabs">
+                        <li class="nav-tab">Главная страница</li>
+                        <li class="nav-tab">Планирование поездки</li>
+                        <li class="nav-tab">Список багажа</li>
+                        <li class="nav-tab">Направления</li>
+                        <li class="nav-tab">Советы путешественникам</li>
+                        <li class="nav-tab">Контакты</li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="center">
+            <form id="weatherForm" class="weather-form">
+                <input type="text" id="city" class="weather-input" placeholder="Введите город">
+                <button type="submit" class="weather-btn">Показать погоду</button>
+            </form>
+            <div id="weatherCard" class="weather-card">
+                <h2 id="weatherCity"></h2>
+                <img id="weatherIcon" src="" alt="Weather icon" style="display:none;">
+                <p id="weatherDescription"></p>
+                <p id="weatherTemperature"></p>
+                <p id="weatherWind"></p>
+                <p id="weatherHumidity"></p>
+                <div id="dayForecast">
+                    <h3>Прогноз на день:</h3>
+                    <p id="morningTemp"></p>
+                    <p id="dayTemp"></p>
+                    <p id="eveningTemp"></p>
+                </div>
+                <button id="showMonthForecast" class="weather-btn">Показать прогноз на месяц</button>
+            </div>
+            <div id="monthForecast" class="weather-card" style="display: none;">
+                <h3>Прогноз на 5 дней:</h3>
+                <div id="monthForecastContent"></div>
+                <button id="backToWeather" class="weather-btn">Вернуться к погоде</button>
+            </div>
+        </div>
+    </main>
   <script type="text/javascript" src="eel.js"></script>
   <script type="text/javascript" src="index.js"></script>
 </body>
