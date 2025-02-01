@@ -128,3 +128,11 @@ def get_weather_by_coords(lat, lon):
         }
     except Exception as e:
         return {"error": f"Ошибка при получении погоды: {str(e)}"}
+
+def get_coordinates(city_name):
+    API_KEY = '8da0d3e0f6e59a5e5c7430ce18b874c1'
+    geocode_url = f"http://api.openweathermap.org/geo/1.0/direct?q={city_name}&limit=1&appid={API_KEY}"
+    response = requests.get(geocode_url).json()
+    if response:
+        return {"lat": response[0]['lat'], "lon": response[0]['lon']}
+    return {"error": "Город не найден"}

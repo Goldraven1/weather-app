@@ -19,12 +19,12 @@
                 </label>
                 <div class="nav-container">
                     <ul class="nav-tabs">
-                        <li class="nav-tab">Главная страница</li>
-                        <li class="nav-tab">Планирование поездки</li>
-                        <li class="nav-tab">Список багажа</li>
-                        <li class="nav-tab">Направления</li>
-                        <li class="nav-tab">Советы путешественникам</li>
-                        <li class="nav-tab">Контакты</li>
+                        <li class="nav-tab" id="navHome">Главная страница</li>
+                        <li class="nav-tab" id="navTrip">Планирование поездки</li>
+                        <li class="nav-tab" id="navBaggage">Список багажа</li>
+                        <li class="nav-tab" id="navDestinations">Направления</li>
+                        <li class="nav-tab" id="navTips">Советы путешественникам</li>
+                        <li class="nav-tab" id="navContacts">Контакты</li>
                     </ul>
                 </div>
             </nav>
@@ -32,29 +32,136 @@
     </header>
     <main>
         <div class="center">
-            <form id="weatherForm" class="weather-form">
-                <input type="text" id="city" class="weather-input" placeholder="Введите город">
-                <button type="submit" class="weather-btn">Показать погоду</button>
-            </form>
-            <div id="weatherCard" class="weather-card">
-                <h2 id="weatherCity"></h2>
-                <img id="weatherIcon" src="" alt="Weather icon" style="display:none;">
-                <p id="weatherDescription"></p>
-                <p id="weatherTemperature"></p>
-                <p id="weatherWind"></p>
-                <p id="weatherHumidity"></p>
-                <div id="dayForecast">
-                    <h3>Прогноз на день:</h3>
-                    <p id="morningTemp"></p>
-                    <p id="dayTemp"></p>
-                    <p id="eveningTemp"></p>
+            <!-- Home (погода & багаж) -->
+            <div id="homeSection">
+                <form id="weatherForm" class="weather-form">
+                    <input type="text" id="city" class="weather-input" placeholder="Введите город">
+                    <button type="submit" class="weather-btn">Показать погоду</button>
+                </form>
+                <div id="weatherCard" class="weather-card">
+                    <h2 id="weatherCity"></h2>
+                    <img id="weatherIcon" src="" alt="Weather icon" style="display:none;">
+                    <p id="weatherDescription"></p>
+                    <p id="weatherTemperature"></p>
+                    <p id="weatherWind"></p>
+                    <p id="weatherHumidity"></p>
+                    <div id="dayForecast">
+                        <h3>Прогноз на день:</h3>
+                        <p id="morningTemp"></p>
+                        <p id="dayTemp"></p>
+                        <p id="eveningTemp"></p>
+                    </div>
+                    <button id="showMonthForecast" class="weather-btn">Показать прогноз на 5 дней</button>
+                    <button id="getBaggage" class="weather-btn">Получить список багажа</button>
                 </div>
-                <button id="showMonthForecast" class="weather-btn">Показать прогноз на месяц</button>
+                <div id="monthForecast" class="weather-card" style="display: none;">
+                    <h3>Прогноз на 5 дней:</h3>
+                    <div id="monthForecastContent"></div>
+                    <button id="backToWeather" class="weather-btn">Вернуться к погоде</button>
+                </div>
+                <div id="luggageList" class="weather-card" style="margin-top: 20px; display:none;">
+                    <h3>Состав багажа:</h3>
+                    <div id="luggageContent"></div>
+                    <button id="hideBaggage" class="weather-btn">Скрыть список</button>
+                </div>
             </div>
-            <div id="monthForecast" class="weather-card" style="display: none;">
-                <h3>Прогноз на 5 дней:</h3>
-                <div id="monthForecastContent"></div>
-                <button id="backToWeather" class="weather-btn">Вернуться к погоде</button>
+            <!-- Планирование поездки -->
+            <div id="tripPlanning" style="display:none;">
+                <h2>Планирование поездки</h2>
+                <form id="tripForm" class="trip-form">
+                    <input type="text" id="origin" placeholder="Откуда" required>
+                    <input type="text" id="destination" placeholder="Куда" required>
+                    <input type="date" id="tripDate" required>
+                    <button type="submit" class="action-btn">Рассчитать маршрут</button>
+                </form>
+                <div id="tripResult" class="result-box">
+                    <!-- Результаты расчёта маршрута появятся здесь -->
+                </div>
+            </div>
+            <!-- Список багажа -->
+            <div id="baggageSection" style="display:none;">
+                <h2>Список багажа</h2>
+                <div id="baggageContent" class="content-box">
+                  <p>Ваш список багажа будет подобран с учётом погодных условий.</p>
+                  <button id="refreshBaggage" class="action-btn">Обновить список багажа</button>
+                  <div id="baggageResult" class="result-box"><!-- Результаты обновления --></div>
+                </div>
+            </div>
+            <!-- Изменённая секция "Направления" -->
+            <div id="destinations" style="display:none;">
+                <h2>Популярные направления</h2>
+                <div class="destinations-grid">
+                    <div class="destination-card">
+                        <div class="destination-image" style="background-image: url('https://cdn.culture.ru/images/199ca5df-f619-5e8d-a6ab-ef1cb668af79');"></div>
+                        <div class="destination-overlay">
+                            <h3>Париж</h3>
+                            <p>Город романтики и стиля.</p>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <div class="destination-image" style="background-image: url('https://assets.bwbx.io/images/users/iqjWHBFdfxIU/iICVWDdRQ45Y/v0/-1x-1.jpg');"></div>
+                        <div class="destination-overlay">
+                            <h3>Лондон</h3>
+                            <p>Исторический и современный мегаполис.</p>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <div class="destination-image" style="background-image: url('https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_6587346ed478ac1aa9fa21df_658735283c349263cd86eaec/scale_1200');"></div>
+                        <div class="destination-overlay">
+                            <h3>Токио</h3>
+                            <p>Футуристический и динамичный город.</p>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <div class="destination-image" style="background-image: url('https://media.newyorker.com/photos/590972a5ebe912338a37746c/master/w_2560%2Cc_limit/Veix-Goodbye-New-York-Color.jpg');"></div>
+                        <div class="destination-overlay">
+                            <h3>Нью-Йорк</h3>
+                            <p>Город, который никогда не спит.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Советы путешественникам -->
+            <div id="travelTips" style="display:none;">
+                <h2>Советы путешественникам</h2>
+                <ul class="tips-list">
+                    <li>
+                        <span class="tip-icon">☂️</span>
+                        Всегда проверяйте прогноз погоды перед поездкой.
+                    </li>
+                    <li>
+                        <span class="tip-icon">🗺️</span>
+                        Планируйте маршруты заранее, чтобы избежать неожиданных проблем.
+                    </li>
+                    <li>
+                        <span class="tip-icon">💳</span>
+                        Заранее бронируйте билеты и отели для лучшей цены.
+                    </li>
+                    <li>
+                        <span class="tip-icon">💼</span>
+                        Не забывайте о страховке и необходимых документах.
+                    </li>
+                </ul>
+            </div>
+            <!-- Изменённая секция "Контакты" -->
+            <div id="contacts" style="display:none;">
+                <h2>Контакты</h2>
+                <form id="contactForm" class="contact-form">
+                    <label for="contactName">Имя:</label>
+                    <input type="text" id="contactName" placeholder="Ваше имя" required>
+                    
+                    <label for="contactEmail">Email:</label>
+                    <input type="email" id="contactEmail" placeholder="Ваш email" required>
+                    
+                    <label for="contactSubject">Тема сообщения:</label>
+                    <input type="text" id="contactSubject" placeholder="Тема" required>
+                    
+                    <label for="contactMessage">Сообщение:</label>
+                    <textarea id="contactMessage" placeholder="Ваше сообщение" required></textarea>
+                    
+                    <button type="submit" class="action-btn">Отправить сообщение</button>
+                </form>
+                <div id="contactFeedback" class="result-box"><!-- Сообщение об отправке --></div>
             </div>
         </div>
     </main>

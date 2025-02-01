@@ -46,7 +46,8 @@ function updateWeatherCard(data) {
     document.getElementById('weatherCity').innerText = data.city || data.error || "";
     const iconElem = document.getElementById('weatherIcon');
     if (data.icon) {
-        iconElem.src = `http://openweathermap.org/img/wn/${data.icon}@2x.png`;
+        // Используем HTTPS для загрузки иконки
+        iconElem.src = `https://openweathermap.org/img/wn/${data.icon}@2x.png`;
         iconElem.style.display = 'block';
     } else {
         iconElem.style.display = 'none';
@@ -100,4 +101,162 @@ document.getElementById('showMonthForecast')?.addEventListener('click', async ()
 document.getElementById('backToWeather')?.addEventListener('click', () => {
     document.getElementById('monthForecast').style.display = 'none';
     document.getElementById('weatherCard').style.display = 'block';
+});
+
+document.getElementById('getBaggage')?.addEventListener('click', async () => {
+    const city = document.getElementById('weatherCity').innerText;
+    if (!city) {
+        alert("Сначала укажите город");
+        return;
+    }
+    try {
+        const data = await eel.get_luggage(city)();
+        const luggageDiv = document.getElementById('luggageContent');
+        luggageDiv.innerHTML = data.luggage
+            .map(item => `<p>${item}</p>`)
+            .join('');
+        document.getElementById('luggageList').style.display = 'block';
+    } catch (error) {
+        alert("Ошибка формирования списка багажа");
+    }
+});
+
+document.getElementById('hideBaggage')?.addEventListener('click', () => {
+    document.getElementById('luggageList').style.display = 'none';
+});
+
+// Функция для отображения нужного раздела и скрытия остальных
+function showSection(sectionId) {
+    const sections = ['homeSection', 'tripPlanning', 'baggageSection', 'destinations', 'travelTips', 'contacts'];
+    sections.forEach(id => {
+        document.getElementById(id).style.display = (id === sectionId) ? 'block' : 'none';
+    });
+}
+
+// Функция для установки активного класса у навигационных табов
+function setActiveNav(activeId) {
+    const navItems = document.querySelectorAll('.nav-tab');
+    navItems.forEach(item => {
+        if (item.id === activeId) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+}
+
+// Добавляем обработчики клика для навигационных элементов
+document.getElementById('navHome')?.addEventListener('click', () => {
+    setActiveNav('navHome');
+    showSection('homeSection');
+});
+document.getElementById('navTrip')?.addEventListener('click', () => {
+    setActiveNav('navTrip');
+    showSection('tripPlanning');
+});
+document.getElementById('navBaggage')?.addEventListener('click', () => {
+    setActiveNav('navBaggage');
+    showSection('baggageSection');
+});
+document.getElementById('navDestinations')?.addEventListener('click', () => {
+    setActiveNav('navDestinations');
+    showSection('destinations');
+});
+document.getElementById('navTips')?.addEventListener('click', () => {
+    setActiveNav('navTips');
+    showSection('travelTips');
+});
+document.getElementById('navContacts')?.addEventListener('click', () => {
+    setActiveNav('navContacts');
+    showSection('contacts');
+});
+
+// Функция для расчёта расстояния (в км) по формуле гаверсина
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Радиус Земли в км
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+}
+
+// Обработка формы планирования маршрута с расчетом расстояния и выбором транспорта
+document.getElementById('tripForm')?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const origin = document.getElementById('origin').value.trim();
+    const destination = document.getElementById('destination').value.trim();
+    const date = document.getElementById('tripDate').value;
+    if (!(origin && destination && date)) {
+        alert("Заполните все поля для расчёта маршрута.");
+        return;
+    }
+    try {
+        const originCoords = await eel.get_coordinates(origin)();
+        const destCoords = await eel.get_coordinates(destination)();
+        if(originCoords.error || destCoords.error) {
+            throw new Error(originCoords.error || destCoords.error);
+        }
+        const distance = calculateDistance(originCoords.lat, originCoords.lon, destCoords.lat, destCoords.lon);
+        let transport = "";
+        let ticketLink = "";
+        if (distance < 300) {
+            transport = "такси";
+            ticketLink = '<a href="https://taxi.ru" target="_blank">Заказать такси</a>';
+        } else if (distance < 1500) {
+            transport = "поезд";
+            ticketLink = '<a href="https://www.rzd.ru" target="_blank">Купить билет на поезд</a>';
+        } else {
+            transport = "авиаперелет";
+            ticketLink = '<a href="https://www.aviasales.ru" target="_blank">Купить авиабилет</a>';
+        }
+        const resultText = `Расстояние от ${origin} до ${destination}: ${Math.floor(distance)} км.<br>
+        Рекомендуемый вид транспорта – ${transport}.<br>
+        ${ticketLink}<br>
+        Поездка запланирована на ${new Date(date).toLocaleDateString()}.`;
+        document.getElementById('tripResult').innerHTML = resultText;
+        document.getElementById('tripResult').classList.add('fade-in');
+    } catch (error) {
+        alert("Ошибка при расчёте маршрута: " + error.message);
+    }
+});
+
+// Обработка формы обратной связи с имитацией AJAX-запроса
+document.getElementById('contactForm')?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const name = document.getElementById('contactName').value.trim();
+    const email = document.getElementById('contactEmail').value.trim();
+    const subject = document.getElementById('contactSubject').value.trim();
+    const message = document.getElementById('contactMessage').value.trim();
+    if (name && email && subject && message) {
+        eel.send_contact_email(name, email, subject, message)().then(response => {
+            document.getElementById('contactFeedback').innerText = response.message;
+            document.getElementById('contactFeedback').classList.add('fade-in');
+            document.getElementById('contactForm').reset();
+        }).catch(error => {
+            alert("Ошибка при отправке: " + error);
+        });
+    } else {
+        alert("Пожалуйста, заполните все поля.");
+    }
+});
+
+// Обработка кнопки обновления багажа с анимацией
+document.getElementById('refreshBaggage')?.addEventListener('click', async () => {
+    const city = document.getElementById('weatherCity').innerText;
+    if (!city) {
+        alert("Сначала укажите город на главной странице");
+        return;
+    }
+    try {
+        const data = await eel.get_luggage(city)();
+        document.getElementById('baggageResult').innerHTML = data.luggage
+            .map(item => `<p>${item}</p>`)
+            .join('');
+        document.getElementById('baggageResult').classList.add('fade-in');
+    } catch (error) {
+        alert("Ошибка обновления списка багажа");
+    }
 });
