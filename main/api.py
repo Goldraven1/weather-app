@@ -7,6 +7,15 @@ locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
 import math
 
 def index(city_name):
+    """
+    Получает текущую погоду для указанного города.
+    
+    Args:
+        city_name (str): Название города
+        
+    Returns:
+        dict: Информация о текущей погоде
+    """
     API_KEY = '8da0d3e0f6e59a5e5c7430ce18b874c1'
     url = f'https://api.openweathermap.org/data/2.5/weather?q={city_name}&appid={API_KEY}&units=metric&lang=ru'
     response = requests.get(url).json()
@@ -25,6 +34,15 @@ def index(city_name):
     return city_weather_update
 
 def get_month_forecast(city_name):
+    """
+    Получает прогноз погоды на 5 дней (максимум для бесплатного API).
+    
+    Args:
+        city_name (str): Название города
+        
+    Returns:
+        dict: Прогноз погоды по дням или сообщение об ошибке
+    """
     API_KEY = '8da0d3e0f6e59a5e5c7430ce18b874c1'
     try:
         # Получаем координаты
@@ -64,6 +82,15 @@ def get_month_forecast(city_name):
         return {"error": f"Ошибка: {str(e)}"}
 
 def get_full_forecast(city_name):
+    """
+    Получает полный прогноз погоды, включая текущую погоду и прогноз на 5 дней.
+    
+    Args:
+        city_name (str): Название города
+        
+    Returns:
+        dict: Полный прогноз погоды
+    """
     day_forecast = index(city_name)
     month_forecast = get_month_forecast(city_name)
     return {
@@ -72,6 +99,15 @@ def get_full_forecast(city_name):
     }
 
 def get_details_forecast(city_name):
+    """
+    Получает детальный прогноз погоды на день с разбивкой по времени суток.
+    
+    Args:
+        city_name (str): Название города
+        
+    Returns:
+        dict: Прогноз погоды для утра, дня и вечера или сообщение об ошибке
+    """
     API_KEY = '8da0d3e0f6e59a5e5c7430ce18b874c1'
     try:
         # Получаем координаты
@@ -106,6 +142,16 @@ def get_details_forecast(city_name):
         return {"error": f"Ошибка: {str(e)}"}
 
 def get_weather_by_coords(lat, lon):
+    """
+    Получает текущую погоду по географическим координатам.
+    
+    Args:
+        lat (float): Широта
+        lon (float): Долгота
+        
+    Returns:
+        dict: Информация о текущей погоде или сообщение об ошибке
+    """
     try:
         API_KEY = '8da0d3e0f6e59a5e5c7430ce18b874c1'
         url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&lang=ru&appid={API_KEY}"
@@ -130,6 +176,15 @@ def get_weather_by_coords(lat, lon):
         return {"error": f"Ошибка при получении погоды: {str(e)}"}
 
 def get_coordinates(city_name):
+    """
+    Получает географические координаты для указанного города.
+    
+    Args:
+        city_name (str): Название города
+        
+    Returns:
+        dict: Широта и долгота или сообщение об ошибке
+    """
     API_KEY = '8da0d3e0f6e59a5e5c7430ce18b874c1'
     geocode_url = f"http://api.openweathermap.org/geo/1.0/direct?q={city_name}&limit=1&appid={API_KEY}"
     response = requests.get(geocode_url).json()
